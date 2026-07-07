@@ -1,0 +1,37 @@
+# Linux Fundamentals - Part 1: Architecture & Navigation
+
+This document covers the structural core of the Linux operating system, standard filesystem layout rules, and essential navigation commands verified during hands-on laboratory exercises.
+
+---
+
+## 🛠️ Core Command Blueprint
+
+### 1. Navigation & Location Triage
+* **`pwd` (Print Working Directory):** Outputs the absolute path from the root directory (`/`) to the current working directory, preventing execution errors due to incorrect relative positioning.
+* **`cd [path]` (Change Directory):** Shifts the current shell context to a new directory. 
+  * `cd ..` moves up exactly one parent level.
+  * `cd ~` returns directly to the current user's home directory.
+
+### 2. Directory Interrogation & File Interaction
+* **`ls` (List):** Displays the contents of the current directory.
+  * `ls -a`: Forces the terminal to reveal hidden files (files prefixed with a `.`, such as configuration scripts).
+  * `ls -l`: Outputs a long-list format displaying detailed file properties, including owner, group, sizes, and permissions.
+* **`cat [file]` (Concatenate):** Reads and streams the raw plaintext contents of a file directly into the standard output stream of the terminal.
+
+---
+
+## 🏗️ The Linux Filesystem Hierarchy Standard (FHS)
+
+Unlike Windows systems that rely on drive letters (e.g., `C:\`), Linux organizes all assets inside a single unified tree structure starting at the root directory (`/`). Key system nodes include:
+
+* **`/` (Root):** The absolute top level of the entire filesystem matrix.
+* **`/home`:** Contains individual user profile directories, personal files, and local settings.
+* **`/etc`:** The central nervous system for configuration files. This directory holds system scripts, network settings, and startup configurations.
+* **`/var` (Variable Data):** Stores dynamic files that grow or change constantly during system execution, such as application log files and spoolers.
+* **`/tmp` (Temporary):** A volatile storage space used by programs to write transient data. Files stored here are typically purged upon system reboot.
+
+---
+
+## 🎯 Key Security Takeaways
+1. **Hidden Asset Visibility:** Malicious actors or system administrators frequently hide tracking tokens, scripts, or configuration baselines as dotfiles (e.g., `.bashrc`). Relying strictly on basic `ls` leaves an operator blind to these files; executing `ls -a` is an administrative requirement for full system audits.
+2. **Volatile Directory Triage:** The `/tmp` directory is unique because it generally grants write permissions to all system users. This makes it a frequent staging ground for downloading tools or running manual reverse-engineering tasks without risking changes to permanent system nodes.
