@@ -1,0 +1,42 @@
+# Windows Fundamentals - Parts 2 & 3: Advanced Diagnostics & Security Controls
+
+This documentation captures core system diagnostics, administrative configurations, and native defensive capabilities audited during hands-on lab exercises.
+
+---
+
+## 🛠️ Administrative & Configuration Utilities
+
+### 1. System Configuration (`msconfig`)
+A troubleshooting utility used to manage system boot parameters and diagnostic modes.
+* **Boot Selection:** Allows switching between *Normal*, *Diagnostic*, or *Selective* boot options to isolate malicious or crashing drivers.
+* **Services Monitoring:** Audits background system services. Unlike Windows client systems (Windows 10/11), Windows Server environments handle user-level startup routines via specialized folder execution paths (`shell:startup`) rather than standard Task Manager views.
+
+### 2. User Account Control (UAC) Architecture
+UAC prevents unauthorized system-level changes by forcing applications to request explicit administrative consent. Security baselines rely on four configurable notify zones:
+* **Always Notify:** High-security profile. Prompts user authorization on all modifications and enforces a secure, dimmed desktop space to prevent automated click-jacking attacks.
+* **Notify for Apps Only:** The factory operating baseline. Intercepts third-party installation binaries but allows standard user setting adjustments natively without prompting.
+* **Notify Without Dimming:** Standard prompt execution without triggering the secure desktop overlay.
+* **Never Notify:** Complete bypass of privilege elevation prompts. (Presents extreme administrative and malware execution risk).
+
+### 3. System Information (`msinfo32`)
+An executive command-line shortcut used to query granular hardware specifications, system variables, and environmental assets.
+* **Security Context:** Provides a central view to track critical internal data strings like **`ComSpec`** (which lists the exact storage path for the native command line interpreter execution environment, usually pointing directly to `%SystemRoot%\system32\cmd.exe`).
+
+---
+
+## 🛡️ Built-in Security Architecture & Defensive Triage
+
+### 1. Windows Security Center
+A unified centralized control interface dedicated to managing core protective arrays:
+* **Virus & Threat Protection:** Conducts file signatures, running memory spaces, and behavior monitoring. Offers *Quick*, *Full*, and custom storage path sweeps to eliminate malicious binaries.
+* **Firewall & Network Protection:** Acts as an automated security boundary inspecting data traffic moving through system network ports, determining authorization based on protocol filtering lists.
+
+### 2. Volume Shadow Copy Service (VSS) & System Protection
+A service that captures point-in-time snapshots of system data blocks even while files are actively written to or locked by running applications.
+* **Administrative Actions:** If System Protection is active, administrators can execute *System Restore*, build manual *Restore Points*, or purge corrupted historical images to recover from severe system compromise or ransomware impact.
+
+---
+
+## 🎯 Key Security Takeaways
+1. **The Secure Desktop Boundary:** Leaving UAC dimming enabled ensures that credentials or privilege choices are handled inside an isolated desktop session that background malware scripts cannot interact with or manipulate.
+2. **Volatile Recovery Readiness:** Ensuring that VSS and System Protection states are actively configured provides an automated buffer against system damage. Ransomware threat actors often target the deletion of shadow copies immediately upon execution to block these native recovery mechanics.
