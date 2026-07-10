@@ -1,0 +1,14 @@
+## Multi-Service Infrastructure Auditing via Telnet
+
+While Telnet is fundamentally insecure for remote administration, it functions as a raw transport layer tool to communicate with various standard and diagnostic TCP services. Operating at **Layer 7**, Telnet can connect to any open TCP port to observe how distinct service daemons respond to manual input.
+
+---
+
+### 🔊 1. The Echo Service (TCP Port 7)
+* **Operational Design:** The Echo service is a diagnostic tool defined in RFC 862. Its functional logic is completely literal: it intercepts any incoming data stream over the established TCP socket and echoes the identical bitstream back to the sender.
+* **Triage Execution:**
+  ```text
+  user@TryHackMe$ telnet 10.48.137.252 7
+  Connected to 10.48.137.252.
+  Hi -> [Sent by User]
+  Hi -> [Echoed by Server]
