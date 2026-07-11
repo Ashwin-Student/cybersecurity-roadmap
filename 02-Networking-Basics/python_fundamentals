@@ -1,0 +1,119 @@
+# Google Cybersecurity Certificate: Python Automation Notes & Practical Scripts
+
+This repository contains structured notes, core concepts, and comprehensive automation scripts based on Course 7 (Automate Cybersecurity Tasks with Python) of the Google Cybersecurity Professional Certificate, extended with practical advanced applications.
+
+---
+
+## 🛠️ Section 1: Course Summary & Core Syntax
+
+### 1. Fundamental Components
+* **Variables:** Data containers (e.g., `target_host = "10.0.0.5"`).
+* **Data Types:** `String` (text), `Integer` (whole numbers like ports), `Float` (decimals), and `Boolean` (`True`/`False` flags for access control).
+* **Conditionals (`if`, `elif`, `else`):** Logic gates used to analyze security states.
+* **Loops (`for`, `while`):** Iterating through arrays of data, such as IP lists or log lines.
+
+### 2. Functions & Community Code
+* **Modular Code:** Using `def` to isolate repetitive logic.
+* **Libraries:** Leveraging built-in modules like `os`, `sys`, and `re` to interact with the operating system and clean data efficiently.
+
+### 3. Strings, Lists, & Regex
+* **Data Handling:** Slicing text banners and using mutable lists to track approved users vs. indicators of compromise (IoCs).
+* **Regular Expressions (`re`):** Pattern matching engine essential for parsing raw text logs to find IP addresses, hashes, or timestamps.
+
+---
+
+## 🤖 Section 2: Complete Cybersecurity Automation Examples
+
+Below are three production-ready automation scripts detailing how Python is utilized in offensive and defensive security operations.
+
+### Example 1: Automated Network Log Parser & IP Extractor (Defense)
+**Objective:** Automatically read a massive, messy firewall or server log file, use Regular Expressions (Regex) to isolate every single IP address, and automatically flag unauthorized or suspicious IP addresses.
+
+```python
+import re
+
+# 1. Define an unauthorized IP subnet list that shouldn't be accessing our system
+SUSPICIOUS_SUBNET = "192.168.5"
+log_file_path = "server_logs.txt"
+
+print("[*] Launching Automated Log Parser...")
+
+try:
+    # 2. Open and read the log file securely using context manager
+    with open(log_file_path, "r") as file:
+        log_data = file.readlines()
+    
+    # 3. Regex Pattern to match standard IPv4 addresses (4 octets separated by dots)
+    ip_pattern = r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"
+    
+    # 4. Process each line dynamically
+    for line_number, line in enumerate(log_data, 1):
+        found_ips = re.findall(ip_pattern, line)
+        
+        for ip in found_ips:
+            # Automation logic: Flag if the IP belongs to a forbidden subnet
+            if ip.startswith(SUSPICIOUS_SUBNET):
+                print(f"[ALERT] Line {line_number}: Unauthorized access attempt from suspicious IP: {ip}")
+                
+except FileNotFoundError:
+    print(f"[!] Error: The log file '{log_file_path}' was not found. Please create it to test.")
+
+#Automated Access Control List (ACL) Updater (Defense)
+
+def update_allow_list(import_file, remove_list):
+    print(f"[*] Automating ACL update for: {import_file}")
+    
+    # 1. Read the current master allow list file
+    with open(import_file, "r") as file:
+        current_users = file.read()
+    
+    # 2. Convert the block text into a clean Python list of users
+    user_list = current_users.split()
+    
+    # 3. Iterate through users and remove unauthorized ones automatically
+    updated_list = []
+    for user in user_list:
+        if user not in remove_list:
+            updated_list.append(user)
+        else:
+            print(f"[-] Automated Action: Revoking access for user: {user}")
+            
+    # 4. Overwrite the file with the clean data
+    with open(import_file, "w") as file:
+        file.write("\n".join(updated_list))
+        
+    print("[+] Access Control List successfully updated and locked.")
+
+# Testing the automation function
+revoked_employees = ["bad_actor99", "terminated_user", "ex_employee_dev"]
+# Assumes a file named 'allow_list.txt' contains names line-by-line
+update_allow_list("allow_list.txt", revoked_employees)
+
+#Automated Live TCP Port Scanner (Offensive / Recon)
+import socket
+import sys
+
+target_host = "localhost"  # Can be changed to a target IP
+ports_to_scan = [21, 22, 80, 443, 8080]
+
+print(f"[*] Initiating automated scan on target: {target_host}")
+
+for port in ports_to_scan:
+    # 1. Instantiate a TCP Streaming Socket object
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1.0)  # Stop waiting after 1 second if connection fails
+    
+    # 2. Try establishing connection to target on current port
+    result = sock.connect_ex((target_host, port))
+    
+    # 3. Analyze return codes (0 indicates successful handshake connection)
+    if result == 0:
+        print(f"[+] PORT {port}: OPEN (Potential Vulnerability/Service Exposed)")
+    else:
+        print(f"[-] PORT {port}: CLOSED")
+        
+    # 4. Clean up the connection path safely
+    sock.close()
+
+print("[*] Automated reconnaissance scan complete.")
+    
