@@ -1,0 +1,87 @@
+# Application Layer Mechanics: HTTP Protocol In-Depth
+
+This documentation captures the theoretical frameworks, request-response lifecycles, structural headers, and state management mechanisms of the Hypertext Transfer Protocol (HTTP) audited during hands-on laboratory scenarios.
+
+---
+
+## 1. Architectural Overview & The Request-Response Lifecycle
+
+HTTP is an stateless, application-layer protocol (Layer 7) that acts as the primary data exchange protocol for the World Wide Web. It relies on a client-server architecture running over a connection-oriented **TCP socket (Port 80 for cleartext HTTP, Port 443 for encrypted HTTPS)**.
+
+### The Lifecycle Chain
+1. **TCP Connection:** The client (browser) establishes a TCP Three-Way Handshake with the target server.
+2. **Client Request:** The client transmits a structured plaintext ASCII request message specifying what resource it wants.
+3. **Server Processing:** The server parses the request, checks its file systems or application backend, and generates a structured response.
+4. **Server Response:** The server streams the status, headers, and requested data payload (HTML, JSON, etc.) back to the client.
+5. **Connection Closure:** The TCP connection is either closed or kept alive for subsequent requests based on header directives.
+
+---
+
+## 2. Structural Anatomy of an HTTP Request
+
+An HTTP request sent from a client consists of three primary components: the **Request Line**, **Headers**, and an optional **Body**.
+
+
+
+### A. The Request Line
+The request line contains three fields separated by spaces:
+* **HTTP Method (Verb):** Defines the exact action to be performed on the server.
+  * `GET`: Requests data retrieval from a specified resource (No request body payload).
+  * `POST`: Submits data to be processed to a specified resource (Data is packaged inside the request body).
+  * `PUT`: Replaces all current representations of the target resource with the uploaded payload.
+  * `DELETE`: Removes the specified resource from the server storage array.
+* **Target URI (Path):** Specifies the absolute path to the resource on the server (e.g., `/images/logo.png` or `/index.html`).
+* **HTTP Version:** Establishes the protocol version being spoken (typically `HTTP/1.1` or `HTTP/2`).
+
+### 1. Comprehensive Core Request Headers (Client to Server)
+
+| Request Header | Functional Working Mechanics | Technical/Security Context |
+| :--- | :--- | :--- |
+| **`Host`** | Defines the target domain name and port number of the server. (Mandatory field in HTTP/1.1). | Enables **Virtual Hosting**, allowing one web server IP to serve multiple distinct web domains. |
+| **`User-Agent`** | Contains a string detailing the client’s browser application, version, and host operating system type. | Frequently used in security forensics to trace automated attack scripts, scrapers, or bot fingerprints. |
+| **`Accept`** | Informs the server about the media types (MIME types) the client browser is capable of processing (e.g., `text/html`). | Content negotiation. Prevents the server from sending payload data types the client cannot render. |
+| **`Accept-Encoding`** | Signals which compression algorithms the client supports (e.g., `gzip`, `deflate`, `br`). | Maximizes bandwidth efficiency by allowing the server to compress payloads before transmission. |
+| **`Accept-Language`** | Informs the server of the user's preferred human language preferences (e.g., `en-US`, `fr`). | Used by application backends to automatically serve localized structural text configurations. |
+| **`Authorization`** | Carries the cryptographic credentials required to authenticate a client with a server (e.g., `Basic` base64 strings or `Bearer` tokens). | Highly sensitive target for packet interception; must never be passed over unencrypted HTTP channels. |
+| **`Cookie`** | Automatically sends stored key-value state pairs back to the server that were previously set via the server's response stack. | The primary mechanism used to bypass HTTP's stateless design to track authenticated active sessions. |
+| **`Connection`** | Controls whether the network socket remains open after the current transaction closes (e.g., `keep-alive`, `close`). | Directs TCP socket optimization rules to reduce handshaking overhead across rapid serial requests. |
+| **`Content-Length`** | Declares the exact size of the request body payload in bytes (used in `POST` and `PUT` methods). | Necessary indicator so the receiving network stack knows exactly when the inbound data stream ends. |
+| **`Content-Type`** | Discloses the media structure type of the resource payload located inside the request body (e.g., `application/json`). | Tells the server's backend framework parser how to unpack and read incoming request payloads. |
+| **`Referer`** | Contains the absolute URL address of the previous web page from which a link to the current page was followed. | Used extensively for web analytics, traffic metrics tracking, and mapping navigation sequences. |
+
+---
+
+## 3. Structural Anatomy of an HTTP Response
+
+When a server answers a client request, its response message mirrors the request layout, utilizing a **Status Line**, **Response Headers**, and a **Response Body**.
+
+
+
+### A. The Status Line
+Contains the protocol version followed by a three-digit **HTTP Status Code** and a textual phrase indicating the outcome:
+* **`1xx` (Informational):** Request received, continuing protocol negotiation.
+* **`2xx` (Success):** The action was successfully received, understood, and accepted (e.g., `200 OK`).
+* **`3xx` (Redirection):** Further action needs to be taken by the client to fulfill the request (e.g., `301 Moved Permanently`).
+* **`4xx` (Client Error):** The request contains bad syntax or cannot be fulfilled due to client mistakes (e.g., `400 Bad Request`, `401 Unauthorized`, `404 Not Found`).
+* **`5xx` (Server Error):** The server failed to fulfill an otherwise valid request (e.g., `500 Internal Server Error`, `503 Service Unavailable`).
+
+### 2. Comprehensive Core Response Headers (Server to Client)
+
+| Response Header | Functional Working Mechanics | Technical/Security Context |
+| :--- | :--- | :--- |
+| **`Server`** | Discloses the software vendor name and build version running the hosting web daemon (e.g., `nginx/1.24.0`). | **High Reconnaissance Target.** Must be hardened, stripped, or spoofed to prevent attackers from mapping known exploits. |
+| **`Content-Type`** | Instructs the client browser how it should interpret and render the payload entity body (e.g., `text/html`, `application/pdf`). | Prevents **MIME-sniffing exploits** where a browser misinterprets text as executable script code. |
+| **`Content-Length`** | Declares the exact byte length of the incoming data payload sent within the response body. | Allows the client browser to validate data integrity and calculate download progress timelines. |
+| **`Set-Cookie`** | Transmits an explicit command string directing the client browser to store a persistent state token locally. | Often flagged during audits to ensure security flags like `Secure`, `HttpOnly`, and `SameSite` are strictly appended. |
+| **`Cache-Control`** | Establishes caching policies, defining who can cache the resource, under what terms, and for how long (e.g., `no-store`, `max-age=3600`). | Critical for data privacy, ensuring volatile user account panels are never stored in public routing caches. |
+| **`Location`** | Used exclusively during redirection responses (`3xx` status codes) to point the client toward a new target URL path. | Automated by browsers to seamlessly shift paths; targets of open redirect exploit analysis. |
+| **`Access-Control-Allow-Origin`**| Part of Cross-Origin Resource Sharing (CORS). Defines which external web origins are permitted to access this server’s data via APIs. | Misconfiguration (e.g., setting to wildcard `*`) opens the application to data leakage risks via malicious scripts. |
+| **`Strict-Transport-Security`**| (HSTS) Explicitly instructs the browser that the site must *only* be accessed using encrypted HTTPS connections. | Defends against protocol downgrade attacks and cookie hijacking vectors during initial handshakes. |
+| **`Content-Security-Policy`** | (CSP) Establishes strict rules listing exactly what trusted domains are allowed to load executable scripts into the current page view. | The primary structural mitigation framework used to neutralize **Cross-Site Scripting (XSS)** vulnerabilities. |
+
+## 4. State Management: The Stateless Dilemma & Cookies
+
+By default, HTTP is **stateless**. The server treats every single incoming request as completely isolated and independent; it retains no native memory of previous transactions from the same user. 
+
+### How Cookies Solve Statelessness
+To enable stateful tracking (such as e-commerce shopping carts or logged-in profiles), web applications employ **Cookies**:
