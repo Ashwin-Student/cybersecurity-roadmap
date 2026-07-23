@@ -1,0 +1,171 @@
+================================================================================
+SQL INJECTION (SQLi) & MYSQL FUNCTIONS GUIDE
+GitHub Repository Documentation | Folder: sql-injection
+================================================================================
+
+HACKERRANK PROFILE
+------------------
+Profile Link: https://www.hackerrank.com/profile/debreashvin
+
+================================================================================
+1. COMMON MYSQL SYNTAX & FUNCTIONS (EASY TO ADVANCED)
+================================================================================
+
+A. BASIC QUERY SYNTAX
+---------------------
+1. SELECT
+   - What it does: Retrieves data from a database table.
+   - Syntax:
+     SELECT column1, column2 FROM table_name;
+   - Example:
+     SELECT username, email FROM users;
+
+2. WHERE
+   - What it does: Filters records based on specific conditions.
+   - Syntax:
+     SELECT * FROM table_name WHERE condition;
+   - Example:
+     SELECT * FROM products WHERE price < 50;
+
+3. ORDER BY
+   - What it does: Sorts query results in ascending (ASC) or descending (DESC) order.
+   - Syntax:
+     SELECT * FROM table_name ORDER BY column_name ASC|DESC;
+
+4. LIMIT & OFFSET
+   - What it does: Restricts the number of rows returned.
+   - Syntax:
+     SELECT * FROM table_name LIMIT count OFFSET start;
+   - Example:
+     SELECT * FROM users LIMIT 1;  -- Returns only the first row
+
+B. ESSENTIAL MYSQL FUNCTIONS
+----------------------------
+1. CONCAT() & GROUP_CONCAT()
+   - What they do:
+     - CONCAT(): Combines multiple strings into one.
+     - GROUP_CONCAT(): Combines values from multiple rows into a single string.
+   - Syntax:
+     SELECT CONCAT(first_name, ' ', last_name) FROM users;
+     SELECT GROUP_CONCAT(username) FROM users;
+
+2. SUBSTRING() / SUBSTR()
+   - What it does: Extracts a portion of a string.
+   - Syntax:
+     SELECT SUBSTRING(string, start_position, length);
+   - Example:
+     SELECT SUBSTRING('Database', 1, 4);  -- Output: 'Data'
+
+3. LENGTH()
+   - What it does: Returns the length of a string.
+   - Syntax:
+     SELECT LENGTH(username) FROM users;
+
+4. CHAR()
+   - What it does: Converts numeric ASCII codes into characters.
+   - Syntax:
+     SELECT CHAR(97, 100, 109, 105, 110);  -- Output: 'admin'
+
+5. DATABASE(), VERSION(), USER()
+   - What they do: Return system metadata.
+   - Syntax:
+     SELECT DATABASE();  -- Returns current database name
+     SELECT VERSION();   -- Returns MySQL version
+     SELECT USER();      -- Returns current database user
+
+6. SLEEP()
+   - What it does: Delays query execution for a specified number of seconds.
+   - Syntax:
+     SELECT SLEEP(5);    -- Pauses database response for 5 seconds
+
+7. IF()
+   - What it does: Evaluates a condition and returns one value if TRUE, another if FALSE.
+   - Syntax:
+     IF(condition, value_if_true, value_if_false)
+   - Example:
+     SELECT IF(1=1, 'Yes', 'No');  -- Output: 'Yes'
+
+
+================================================================================
+2. WHAT IS SQL INJECTION (SQLi) & HOW IT WORKS
+================================================================================
+
+WHAT IS IT?
+-----------
+SQL Injection (SQLi) is a security vulnerability where an attacker tricks a web 
+application into running unintended SQL code on the backend database.
+
+HOW IT WORKS:
+-------------
+1. An application takes input from a user (like a login form or search bar).
+2. The application unsafely joins this input directly into a SQL query string.
+3. The database receives and executes the modified query, altering its intended behavior.
+
+TYPES OF SQL INJECTION:
+-----------------------
+
+1. IN-BAND / UNION-BASED SQLi
+   - How it works: An attacker uses the UNION keyword to attach their own query to 
+     the application's original query, displaying sensitive data directly on the page.
+   - Example:
+     Original Query:  SELECT * FROM products WHERE category = 'electronics';
+     Attacker Input:  electronics' UNION SELECT username, password FROM users -- 
+     Resulting Query: SELECT * FROM products WHERE category = 'electronics' 
+                      UNION SELECT username, password FROM users -- ';
+
+2. AUTHENTICATION BYPASS (BOOLEAN-BASED)
+   - How it works: Forces the WHERE clause condition to always evaluate to TRUE.
+   - Example:
+     Original Query:  SELECT * FROM users WHERE username = 'USER_INPUT' AND password = 'USER_INPUT';
+     Attacker Input:  admin' OR '1'='1
+     Resulting Query: SELECT * FROM users WHERE username = 'admin' OR '1'='1' AND password = '...';
+     Outcome: Logged in as 'admin' without knowing the password.
+
+3. BLIND SQLi (BOOLEAN & TIME-BASED)
+   - How it works: Used when the application does NOT display database results on screen.
+   - Boolean-Based: Attacker asks TRUE/FALSE questions to infer data character-by-character based 
+     on subtle differences in page rendering.
+   - Time-Based: Attacker forces the database to pause execution using SLEEP() if a condition is true.
+     Example: IF(SUBSTRING(DATABASE(), 1, 1) = 'a', SLEEP(5), 0)
+
+
+================================================================================
+3. HOW TO DETECT SQL INJECTION
+================================================================================
+
+1. MANUAL TESTING:
+   - Input Single Quotes ('): Type ' or " into input fields or URL parameters. If the app returns a 500 Internal Server Error or a MySQL error message, SQLi may be present.
+   - Logic Tests: Test parameters with true/false logic (e.g., `id=1` vs `id=2-1` or `id=1 AND 1=1`).
+   - Inject Time Delays: Try inputs like `' OR SLEEP(5) -- ` to check if the response delays by 5 seconds.
+
+2. AUTOMATED SCANNERS:
+   - Vulnerability Scanners: Tools like Burp Suite, OWASP ZAP, or Acunetix test inputs automatically.
+   - SQLMap: An automated tool dedicated to detecting and exploiting SQL injection flaws.
+     Command Example: sqlmap -u "http://target.com/page.php?id=1" --batch
+
+3. SOURCE CODE REVIEW (STATIC ANALYSIS):
+   - Search source code for string concatenation used inside SQL execution functions (e.g., in PHP: `$db->query("SELECT * FROM users WHERE id = " . $_GET['id']);`).
+
+
+================================================================================
+4. HOW TO PREVENT SQL INJECTION
+================================================================================
+
+1. USE PREPARED STATEMENTS / PARAMETERIZED QUERIES (PRIMARY DEFENSE)
+   - Why it works: Separates the SQL query structure from user data. User input is treated strictly as data, never as executable code.
+   - Code Example (PHP PDO):
+     $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username AND password = :password');
+     $stmt->execute(['username' => $userInput, 'password' => $passInput]);
+
+2. USE AN ORM (OBJECT-RELATIONAL MAPPING)
+   - Frameworks like Sequelize, Hibernate, or Prisma handle parameterized queries under the hood automatically.
+
+3. INPUT VALIDATION & ALLOW-LISTING
+   - Restrict user inputs to expected formats (e.g., ensure an ID parameter only accepts integers).
+
+4. PRINCIPLE OF LEAST PRIVILEGE
+   - Do not run application database connections using the `root` or `admin` accounts.
+   - Restrict database user account permissions to only what is necessary (e.g., revoke `LOAD_FILE` or administrative privileges).
+
+5. WEB APPLICATION FIREWALL (WAF)
+   - Deploy a WAF (like AWS WAF or Cloudflare) as a secondary defense layer to inspect and block malicious SQL patterns in web requests.
