@@ -1,0 +1,90 @@
+# 💻 Inside the Computer: Boot Sequence & System Components
+
+A comprehensive overview of how a computer system initializes from a cold power-off state to a fully operating environment, along with key hardware components, memory types, and peripheral interfaces.
+
+---
+
+## ⚡ The 5-Step Boot Sequence
+
+The boot sequence is the process a computer undergoes to load the Operating System (OS) into main memory (RAM) and hand over system control.
+
+```text
++---------------------+     +------------------+     +------------------------+
+| 1. Press Power Button| --> | 2. Firmware (UEFI)| --> | 3. Power-On Self Test  |
++---------------------+     +------------------+     +------------------------+
+                                                                  |
+                                                                  v
++---------------------+     +------------------+     +------------------------+
+|   5. OS Execution   | <-- | 4. Load Bootloader| <-- | 4. Select Boot Device  |
++---------------------+     +------------------+     +------------------------+
+
+Step 1: Press the Power Button
+When you press the power button, a hardware signal is sent to the Power Supply Unit (PSU), instructing it to begin supplying electricity to the motherboard and internal components.
+
+💡 Analogy: Waking up in the morning—oxygen and blood begin pumping through your body to prime your systems.
+
+Step 2: Firmware Initialization (UEFI / BIOS)
+Once power is stable, motherboard firmware stored in ROM initializes basic hardware communication before the main processor is fully active.
+
+Unified Extensible Firmware Interface (UEFI): Modern firmware standard that manages system initialization, supports larger storage drives, provides faster boot times, and offers secure boot capabilities.
+
+Basic Input/Output System (BIOS): Legacy firmware system replaced almost entirely by UEFI in modern machines.
+
+💡 Analogy: Your body has started up, but your conscious brain isn't fully awake yet.
+
+Step 3: Power-On Self Test (POST)
+The UEFI/BIOS executes a diagnostic routine known as POST to ensure that required hardware components are attached, properly configured, and functioning without errors.
+
+Checked Components: CPU, RAM, GPU/Display adapter, storage drives, and critical I/O controllers.
+
+Error Indicators: If a critical failure occurs during POST, the system halts and alerts the user using beep codes or diagnostic LEDs on the motherboard.
+
+Step 4: Select Boot Device
+After passing POST, the firmware checks its configured boot order priority list to locate a bootable device.
+
+Common Boot Sources:
+
+Internal Solid State Drives (SSD) / Hard Disk Drives (HDD)
+
+External USB flash drives (I/O storage)
+
+Network Boot (PXE via Network Adapter)
+
+Optical Media (CD/DVD)
+
+Step 5: Initiate Bootloader & OS Hand-Off
+Once a valid boot device is identified, the firmware launches the bootloader stored on that drive (e.g., GRUB for Linux, Windows Boot Manager for Windows).
+
+The bootloader transfers the Operating System kernel from storage into RAM.
+
+The UEFI hands over full control of hardware components and I/O sub-systems to the OS.
+
+The Graphical User Interface (GUI) or Command Line Interface (CLI) is loaded for user interaction.
+
+User Interfaces & Peripheral Architecture
+Graphical User Interface (GUI)
+A visual interface that allows users to interact with the computer using graphical elements like windows, icons, menus, and pointers (WIMP), rather than typing text commands.
+
+Driven By: GPU (for rendering graphics) and RAM (for storing visual buffers).
+
+Control: Managed by the OS kernel once the bootloader finishes initialization.
+
+Input / Output (I/O) Devices
+Peripherals that serve as the bridge between human interaction and computer processing.
+
+Input Devices (Data in): Keyboard, Mouse, Scanner, Webcam, Microphone.
+
+Output Devices (Data out): Monitor/Display, Speakers, Printers, Headphones.
+
+Dual I/O Devices: Touchscreens, external storage drives, network interfaces.
+
+Network Adapter (NIC)
+The Network Interface Card (NIC) connects the system to local networks (LAN) and the Internet.
+
+Wired (Ethernet): Uses RJ-45 interfaces for high-speed, low-latency transmission.
+
+Wireless (Wi-Fi): Uses radio waves to transmit data packets.
+
+Layer 2 Identification: Every NIC has a unique physical address hardcoded into it, known as a MAC Address.
+
+
