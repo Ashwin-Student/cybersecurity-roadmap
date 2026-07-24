@@ -1,0 +1,120 @@
+# 💻 TryHackMe - Operating Systems: Introduction
+
+**Room Link:** [TryHackMe - Operating Systems: Introduction](https://tryhackme.com/room/operatingsystemsintroduction)  
+**Difficulty:** Easy  
+**Category:** Pre-Security / OS Security Fundamentals  
+
+---
+
+## 📌 Overview
+An **Operating System (OS)** acts as an intermediary/manager between computer hardware and user applications. It abstracts hardware complexities, schedules system tasks, enforces access control, and manages resource allocation so multiple programs can run smoothly without interfering with one another.
+
+---
+
+## 🛠️ Key OS Responsibilities & Advantages
+* **Process Management:** Allocates CPU time across running applications, preventing frozen states through multitasking.
+* **Memory Management:** Allocates and frees RAM for processes, ensuring programs don't overwrite each other's memory.
+* **File System & Storage Management:** Manages reading, writing, and organizing data on disk storage.
+* **Device Management:** Uses device drivers to facilitate communication between software and hardware peripherals.
+* **Security & Access Control:** Enforces permissions, authentication, and user isolation to prevent unauthorized access.
+
+---
+
+## 🧠 System Architecture: User Space vs. Kernel Space
+
+The operating system enforces a strict boundary between application execution and core system management:
+
+| Domain | Privilege Level | Functions / Responsibilities |
+| :--- | :--- | :--- |
+| **User Space** | Low Privilege | Runs standard user applications (e.g., Browsers, Text Editors). Cannot directly access hardware. |
+| **Kernel Space** | High Privilege (Root/SYSTEM) | The core of the OS. Directly interacts with CPU, RAM, and hardware peripherals. |
+
+> 💡 **System Calls:** When an application in *User Space* needs to write to a disk or send network packets, it initiates a **System Call (syscall)** to request the *Kernel Space* to perform the action safely on its behalf.
+
+---
+
+## 🧩 Types of OS Kernels
+
+1. **Monolithic Kernel:**
+   * *Architecture:* All core services (file system, memory management, IPC, hardware drivers) run in kernel space.
+   * *Pros:* Extremely fast execution speed due to low system call overhead.
+   * *Cons:* A bug or crash in a driver can bring down the entire system.
+   * *Examples:* Linux, BSD.
+
+2. **Microkernel:**
+   * *Architecture:* Keeps only the absolute bare minimum in kernel space (basic IPC, memory management, scheduling). Other services run in user space as server daemons.
+   * *Pros:* Highly stable, modular, and secure; crashes in user-space drivers don't crash the kernel.
+   * *Cons:* Higher performance overhead due to frequent context switching between user and kernel modes.
+   * *Examples:* Minix, L4, QNX.
+
+3. **Hybrid Kernel:**
+   * *Architecture:* Combines elements of monolithic speed with microkernel design structure.
+   * *Examples:* Windows NT, macOS (XNU).
+
+---
+
+## 🔒 File Permissions & Access Controls
+
+Operating systems rely on access controls to enforce user boundaries and confidentiality.
+
+### Linux File Permissions Structure
+Linux divides permissions into three sets: **User (u)**, **Group (g)**, and **Others (o)**.
+
+| Permission | Symbol | Octal Value | Description |
+| :---: | :---: | :---: | :--- |
+| **Read** | `r` | `4` | Ability to view file content or list directory files |
+| **Write** | `w` | `2` | Ability to modify file content or add/remove files in directory |
+| **Execute** | `x` | `1` | Ability to run a file as a script/binary or enter a directory |
+
+* **Example Notation:** `chmod 755 file.sh`
+  * `7` (Owner: `r+w+x`)
+  * `5` (Group: `r+x`)
+  * `5` (Others: `r+x`)
+
+---
+
+## 🖥️ User Interfaces: GUI vs. CLI
+
+* **Graphical User Interface (GUI):** Visual navigation relying on menus, icons, and buttons. Great for standard desktop usage.
+* **Command-Line Interface (CLI):** Direct text-input control allowing faster execution, script automation, and deep administrative control (critical for security auditing and server management).
+
+---
+
+## 🎯 Key Takeaways forAwesome job wrapping up the lab! Here is a clean, well-formatted **Markdown note template** structured specifically for GitHub (`README.md` or notes folder). It covers all the core concepts from the TryHackMe Operating System Introduction lab so you can copy and paste it straight into your repository.
+
+---
+
+# 🖥️ Operating System Fundamentals (TryHackMe Notes)
+
+A comprehensive cheat sheet and summary covering Operating System architecture, kernel types, core functionality, and permissions based on the TryHackMe *Operating System Introduction* lab.
+
+---
+
+## 📌 1. What is an Operating System (OS)?
+
+An **Operating System (OS)** is system software that manages computer hardware, software resources, and provides common services for computer programs. It acts as an intermediary between the user/applications and the physical hardware.
+
+### Key Advantages of using an OS:
+* **Hardware Abstraction:** Hides hardware complexity from applications.
+* **Resource Management:** Efficiently allocates CPU time, RAM, and storage space among competing processes.
+* **User Interface:** Provides a Graphical User Interface (GUI) or Command Line Interface (CLI) for ease of interaction.
+* **Security & Isolation:** Prevents applications from unauthorized access to system resources or other apps' memory.
+* **Multitasking:** Allows multiple applications to run simultaneously without crashing the system.
+
+---
+
+## ⚙️ 2. How an OS Works (Architecture)
+
+An OS acts as a layered interface:
+
+```text
+[ User / Applications ]
+          │
+          ▼
+    [ System Calls ]
+          │
+          ▼
+      [ Kernel ]
+          │
+          ▼
+ [ Hardware (CPU, RAM, Disk) ]
