@@ -1,0 +1,72 @@
+Hack The Box: Fawn - Writeup & Protocol Notes
+Target OS: Linux
+
+Difficulty: Very Easy
+
+Primary Service: FTP (File Transfer Protocol)
+
+Lab Answers & WalkthroughTaskQuestionAnswer
+
+1 What does the 3-letter acronym FTP stand for?  File Transfer Protocol
+2 Which port does the FTP service listen on usually?  21
+3 FTP sends data in the clear. What acronym is used for a secure protocol extending SSH?  SFTP
+4 What is the command used to send an ICMP echo request to test connection?  ping
+5 From your scans, what version is FTP running on the target?   vsftpd 3.0.3
+6 From your scans, what OS type is running on the target?  Unix / Linux
+7 What command displays the ftp client help menu? ftp -?
+8 What username is used to log in without an account? anonymous
+9 What is the response code received for 'Login successful'?  230
+10 Besides dir, what common Linux command lists files/directories in FTP?  ls
+11 What command downloads a file from the FTP server?  get
+
+
+Protocol Reference: File Transfer Protocol (FTP)
+Overview
+FTP (File Transfer Protocol) is a standard network protocol used to transfer files between a client and a server over a TCP/IP connection.
+
+Port Allocation:
+
+Port 21: Control channel (receives commands, authenticates users).
+
+Port 20: Data channel (transfers actual file contents).
+
+Security Risk: Plaintext protocol. All credentials, commands, and transferred files are transmitted without encryption and can be sniffed via MiTM (Man-in-the-Middle) attacks.
+
+Secure Alternatives
+SFTP (SSH File Transfer Protocol): Runs over SSH (Port 22). Encrypts both credentials and data traffic.
+
+FTPS (FTP over SSL/TLS): Standard FTP wrapped in an explicit or implicit TLS/SSL encryption layer.
+
+Key FTP Status Codes
+220: Service ready for new user.
+
+230: User logged in, proceed (Login successful).
+
+331: User name okay, need password.
+
+430 / 530: Invalid credentials or authorization failure.
+
+Command Cheat Sheet
+Network Reconnaissance
+Bash
+# Test connectivity to the target
+ping <TARGET_IP>
+
+# Scan for open ports and service versions
+nmap -sV <TARGET_IP>
+
+FTP Operations
+Bash
+# Connect to FTP server
+ftp <TARGET_IP>
+
+# Authenticate anonymously (when prompted)
+Name: anonymous
+Password: <Leave blank / Press Enter>
+
+# Interacting with FTP prompt
+ftp> help           # Displays available FTP client commands
+ftp> ls             # Lists files in the current remote directory
+ftp> status         # Displays current connection status
+ftp> get flag.txt   # Downloads 'flag.txt' to local directory
+ftp> exit           # Closes connection and exits client
