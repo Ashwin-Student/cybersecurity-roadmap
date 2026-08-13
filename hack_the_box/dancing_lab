@@ -1,0 +1,62 @@
+Hack The Box: Dancing - Writeup & Protocol Notes
+Target OS: Windows
+
+Difficulty: Very Easy
+
+Primary Service: SMB (Server Message Block)
+
+Lab Answers & Walkthrough
+  TaskQuestionAnswer
+  
+1 What does the 3-letter acronym SMB stand for?  Server Message Block
+2 What port does SMB use to operate at?    445
+3 What is the service name for port 445 that came up in our Nmap scan?  microsoft-ds
+4 What flag/switch can we use with smbclient to list available shares?   -L
+5 How many shares are there on Dancing?  4
+6 What is the name of the share we are able to access with a blank password?  WorkShares
+7 What command can we use within the SMB shell to download files?  get  
+
+Protocol Reference: Server Message Block (SMB)
+Overview
+SMB (Server Message Block) is a network file sharing protocol that allows applications on a computer to read and write to files and request services from programs in a computer network.
+
+Ports Used:
+
+Port 445 (TCP): Modern SMB running directly over TCP/IP (microsoft-ds).
+
+Port 139 (TCP): Legacy SMB running over NetBIOS Session Service.
+
+Common Share Types
+Administrative Shares (C$, ADMIN$): Hidden default shares used by Windows administrators. Access typically requires admin credentials.
+
+IPC$ (Inter-Process Communication): Used for communication between processes via named pipes.
+
+User/Custom Shares: Directories explicitly shared by administrators (e.g., WorkShares).
+
+Command Cheat Sheet
+Network Reconnaissance
+Bash
+# Test connectivity
+ping <TARGET_IP>
+
+# Service version scan on standard ports
+nmap -sV -sC <TARGET_IP>
+
+SMB Enumeration & Access (smbclient)
+Bash
+# List available shares on the target (anonymous / null session)
+smbclient -L <TARGET_IP>
+
+# Connect to a specific share as a Guest / Anonymous user
+smbclient //<TARGET_IP>/WorkShares -U Guest
+
+# When prompted for a password, press Enter (blank password)
+
+Navigating the Interactive SMB Shell
+Bash
+smb: \> ls                     # List files and directories in current folder
+smb: \> cd DirectoryName        # Change directory
+smb: \> get flag.txt           # Download a file to local working directory
+smb: \> mget *.txt             # Download multiple files matching pattern
+smb: \> help                   # Show list of available SMB commands
+smb: \> exit                   # Close SMB connection  
