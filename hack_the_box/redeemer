@@ -1,0 +1,53 @@
+Hack The Box: Redeemer - Writeup & Protocol Notes
+Target OS: Linux
+
+Difficulty: Very Easy
+
+Primary Service: Redis (Remote Dictionary Server)
+
+Lab Answers & Walkthrough 
+Task Question Answer
+1 Which TCP port is open on the machine?   6379
+2 Which service is running on the port that is open on the machine?  redis
+3 What type of database is Redis?   (i) In-memory Database
+4 Which command-line utility is used to interact with the Redis server?   redis-cli
+5 Which flag is used with the Redis command-line utility to specify the hostname?  -h
+6 Once connected, which command is used to obtain information and statistics?  info
+7 What is the version of the Redis server being used on the target machine?   6.0.7
+8 Which command is used to select the desired database in Redis?  select
+9 How many keys are present inside the database with index 0?   4
+10 Which command is used to obtain all the keys in a database?  keys *
+
+Protocol Reference: Redis (Remote Dictionary Server)
+Overview
+Redis is an open-source, in-memory key-value data store used primarily as a database, cache, and message broker.
+
+Default Port: 6379 (TCP).
+
+Key Feature: Because data resides in RAM, read/write operations are extremely fast compared to disk-based databases like MySQL or PostgreSQL.
+
+Security Implications
+Unauthenticated Access: By default, older versions or misconfigured instances of Redis do not enforce password authentication when bound to external interfaces.
+
+Potential Risks: Unauthenticated users can read sensitive stored data, write files to disk (e.g., SSH authorized keys or web shells), or cause Denial of Service (DoS) using commands like FLUSHALL.
+
+Command Cheat Sheet
+Network Reconnaissance
+Bash
+# Scan for Redis port explicitly and retrieve service information
+nmap -p 6379 -sV <TARGET_IP>
+Redis Enumeration (redis-cli)
+Bash
+# Connect to a remote Redis instance
+redis-cli -h <TARGET_IP> -p 6379
+
+# Connect without specifying port (defaults to 6379)
+redis-cli -h <TARGET_IP>
+Essential Redis Commands
+Bash
+127.0.0.1:6379> INFO             # Display server info, version, and DB statistics
+127.0.0.1:6379> SELECT <index>   # Switch to a specific database (e.g., SELECT 0)
+127.0.0.1:6379> KEYS *           # List all keys in the selected database
+127.0.0.1:6379> GET <key_name>   # Fetch the value stored inside a specific key
+127.0.0.1:6379> DBSIZE           # Get total number of keys in current database
+127.0.0.1:6379> EXIT             # Quit the redis-cli session
