@@ -1,0 +1,51 @@
+Hack The Box: Appointment - Writeup & Protocol Notes
+Target OS: Linux
+
+Difficulty: Very Easy
+
+Primary Service: Apache HTTP Server / Web Application
+
+Primary Vulnerability: SQL Injection (SQLi) Authentication Bypass
+
+Lab Answers & Walkthrough  Task Question Answer
+1 What does the acronym SQL stand for? Structured Query Language
+2 What is one of the most common types of SQL vulnerabilities? SQL Injection / SQLi
+3 What is the 2021 OWASP Top 10 classification for this vulnerability?  A03:2021-Injection
+4 What does Nmap report as the service and version running on port 80?  Apache httpd 2.4.38 ((Debian))
+5 What is the standard port used for the HTTPS protocol?  443
+6 What is a folder called in web-application terminology? directory 
+7 What is the HTTP response code returned for Not Found errors? 404
+8 Which switch do we use with Gobuster to specify searching for directories? dir
+9 What single character can be used to comment out the rest of a line in MySQL?  #
+10 Use a comment payload to log in as admin without knowing the password. What is the first word on the webpage returned? Congratulations
+
+
+Vulnerability Reference: SQL Injection (SQLi)
+Overview
+SQL Injection (SQLi) occurs when untrusted user input is directly concatenated or interpolated into backend SQL queries without proper sanitization or parameterization.
+
+Impact: Allows attackers to bypass authentication controls, manipulate existing query logic, extract sensitive database contents, or modify/delete database entries.
+
+Authentication Bypass Mechanics
+When a login form executes a backend query like:
+
+SELECT * FROM users WHERE username = '$USER_INPUT' AND password = '$PASSWORD';
+Submitting admin'# or admin'-- - as the username input transforms the query into:
+
+SQL
+SELECT * FROM users WHERE username = 'admin'#' AND password = '...';
+
+The # character instructs MySQL to ignore everything that follows on the line, forcing the query to evaluate solely whether the user admin exists and rendering password verification completely inactive.
+
+Command Cheat Sheet
+Network Reconnaissance
+Bash
+# Perform a service version scan on default web ports
+nmap -sV -p 80 <TARGET_IP>
+Web Directory Discovery (gobuster)
+Bash
+# Brute force directories using a common wordlist
+gobuster dir -u http://<TARGET_IP>/ -w /usr/share/wordlists/dirb/common.txt
+
+
+SQL
