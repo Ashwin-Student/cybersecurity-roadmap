@@ -1,0 +1,75 @@
+# TryHackMe - Introductory Networking
+
+![Platform](https://img.shields.io/badge/Platform-TryHackMe-red?style=flat-square&logo=tryhackme)
+![Category](https://img.shields.io/badge/Category-Networking-blue?style=flat-square)
+![Difficulty](https://img.shields.io/badge/Difficulty-Easy-green?style=flat-square)
+
+## 📋 Executive Summary
+The **Introductory Networking** room covers the fundamental networking concepts essential for offensive and defensive security professionals. This includes the theoretical framework behind network communications—specifically comparing the **OSI Model** and the **TCP/IP Model**—as well as practical hands-on experience using core terminal networking tools like `ping`, `traceroute`, and `whois`.
+
+---
+
+## 🛠️ Key Concepts Covered
+* **OSI Model:** 7-layer framework governing data transfer across systems.
+* **TCP/IP Model:** 4-layer practical networking model used by the modern internet.
+* **Encapsulation & Decapsulation:** How data transforms across protocol data units (PDUs) like Segments, Packets, and Frames.
+* **Three-Way Handshake:** Establishing connection-oriented TCP communications via `SYN`, `SYN-ACK`, `ACK`.
+* **Network Diagnostic Tooling:** Command-line network analysis using native utilities.
+
+---
+
+## 📌 Room Tasks & Breakdown
+
+### Task 1 — Introduction
+Getting started with the basic principles of networking.
+* *Status: Completed*
+
+---
+
+### Task 2 — The OSI Model: An Overview
+The Open Systems Interconnection (OSI) model standardizes network communications across seven distinct layers.
+
+| Layer # | Layer Name | Key Function / Protocol Data Unit (PDU) |
+| :--- | :--- | :--- |
+| **7** | Application | Network services interface for user applications (HTTP, FTP, DNS) |
+| **6** | Presentation | Data formatting, encryption, and compression |
+| **5** | Session | Tracks and manages sessions between host and target |
+| **4** | Transport | End-to-end communication selection (TCP vs UDP); Data = **Segments** (TCP) / **Datagrams** (UDP) |
+| **3** | Network | Logical addressing (IP Routing); Data = **Packets** |
+| **2** | Data Link | Physical addressing (MAC), error checking; Data = **Frames** |
+| **1** | Physical | Electrical/Light signals transmitting raw binary streams |
+
+#### Task Questions & Answers
+1. **Which layer would choose to send data over TCP or UDP?**
+   `4`
+2. **Which layer checks received packets to make sure that they haven't been corrupted?**
+   `2`
+3. **In which layer would data be formatted in preparation for transmission?**
+   `2`
+4. **Which layer transmits and receives data?**
+   `1`
+5. **Which layer encrypts, compresses, or otherwise transforms the initial data to give it a standardised format?**
+   `6`
+6. **Which layer tracks communications between the host and receiving computers?**
+   `5`
+7. **Which layer accepts communication requests from applications?**
+   `7`
+8. **Which layer handles logical addressing?**
+   `3`
+9. **When sending data over TCP, what would you call the "bite-sized" pieces of data?**
+   `segments`
+10. **[Research] Which layer would the FTP protocol communicate with?**
+    `7`
+11. **Which transport layer protocol would be best suited to transmit a live video?**
+    `udp`
+
+---
+
+### Task 3 — Encapsulation
+As data moves down the OSI layers from Application to Physical, each layer wraps the data with its own header (and trailer at Layer 2). This process is **Encapsulation**. When data is received, the process reverses (**De-encapsulation**).
+
+```text
+[ Data ]                             -> Application/Presentation/Session
+[ L4 Header | Data ]                 -> Segment / Datagram (Transport)
+[ L3 Header | L4 Header | Data ]     -> Packet (Network)
+[ L2 Header | L3 Header | L4 Header | Data | L2 Trailer ] -> Frame (Data Link)
