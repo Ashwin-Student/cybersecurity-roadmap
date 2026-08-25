@@ -1,0 +1,133 @@
+# TryHackMe - Python Basics
+
+![Platform](https://img.shields.io/badge/Platform-TryHackMe-red?style=flat-square&logo=tryhackme)
+![Category](https://img.shields.io/badge/Category-Scripting-blue?style=flat-square)
+![Difficulty](https://img.shields.io/badge/Difficulty-Easy-green?style=flat-square)
+
+## 📋 Executive Summary
+The **Python Basics** room introduces fundamental programming concepts in Python 3 essential for cybersecurity practitioners. Python is widely used across offensive and defensive security for writing custom exploit scripts, parsing log files, automating network scans, and building security tooling.
+
+---
+
+## 🛠️ Key Concepts Covered
+* **Variables & Data Types:** Strings, Integers, Floats, Booleans, and Type Conversion.
+* **Control Flow & Logic:** Conditional statements (`if`, `elif`, `else`) and comparison operators.
+* **Loops & Iteration:** Repeating code structures using `for` and `while` loops.
+* **Data Structures:** Managing ordered and key-value datasets using **Lists** and **Dictionaries**.
+* **Functions:** Writing modular, reusable code blocks with arguments and return values.
+* **File I/O:** Reading from and writing to local files (crucial for log processing and wordlists).
+
+---
+
+## 📌 Room Tasks & Breakdown
+
+### Task 1 — Introduction
+Introduction to Python as an interpreted, high-level programming language widely used in cybersecurity.
+* *Status: Completed*
+
+---
+
+### Task 2 — Hello World
+Printing output to the console using the `print()` function.
+
+```python
+print("Hello World")
+
+  Task 3 — Mathematical Operators
+Python supports standard arithmetic operations for numerical calculations.  
+  # Standard arithmetic operations
+addition = 5 + 2       # 7
+subtraction = 5 - 2    # 3
+multiplication = 5 * 2 # 10
+division = 5 / 2       # 2.5
+remainder = 5 % 2      # 1
+exponent = 5 ** 2      # 25
+
+Task 4 — Variables & Data Types
+Variables store data values in memory. Python automatically assigns data types based on the assigned value.
+name = "Admin"       # String
+age = 25            # Integer
+height = 5.9        # Float
+is_active = True    # Boolean
+
+Task 5 — Logical & Comparison Operators
+Used to evaluate conditions, returning True or False.
+# Comparison and Logical Operators
+a = 10
+b = 20
+
+is_equal = (a == b)         # False
+not_equal = (a != b)        # True
+both_true = (a < b and b > 5) # True
+
+Task 6 — Conditionals (If/Elif/Else)
+Decisions are made based on boolean conditions using indentation-based blocks.
+
+age = 18
+
+if age >= 18:
+    print("Access Granted")
+elif age > 12:
+    print("Limited Access")
+else:
+    print("Access Denied")
+
+
+Task 7 — Loops (For & While)
+Loops allow executing a block of code repeatedly.  
+# For Loop Example
+for port in range(1, 4):
+    print(f"Scanning port {port}")
+
+# While Loop Example
+count = 0
+while count < 3:
+    print("Attempting connection...")
+    count += 1
+
+Task 8 — Data Structures: Lists & Dictionaries
+Lists maintain ordered item collections, while Dictionaries store key-value pairs.
+# List Example
+ports = [21, 22, 80, 443]
+ports.append(8080)
+
+# Dictionary Example
+target = {
+    "ip": "10.10.10.5",
+    "os": "Linux",
+    "open_ports": ports
+}
+print(target["ip"])
+
+Task 9 — Functions
+Functions modularize code into reusable blocks, accepting input parameters and returning results.
+def check_port(ip, port):
+    return f"Checking {ip} on port {port}"
+
+result = check_port("192.168.1.1", 22)
+print(result)
+
+Task 10 — Files I/O (Reading & Writing Files)
+File handling allows security tools to read wordlists or export scan reports.
+
+# Reading from a file
+with open("wordlist.txt", "r") as file:
+    words = file.readlines()
+
+# Writing to a file
+with open("results.txt", "w") as file:
+    file.write("Discovered open port: 80\n")
+
+Task 11 — Practical Project (Bitcoin Shipping)
+Applying learned concepts to solve a practical scripting problem.
+
+def calculate_shipping(weight):
+    if weight <= 2:
+        cost = weight * 1.50
+    elif weight <= 6:
+        cost = weight * 3.00
+    else:
+        cost = weight * 4.00
+    return cost
+
+print(calculate_shipping(4.8))
