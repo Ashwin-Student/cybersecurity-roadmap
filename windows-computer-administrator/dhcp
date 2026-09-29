@@ -1,0 +1,46 @@
+prerequisites;
+1.disable the vm machine dhcp
+  1. go to edit
+  2.virtual network editor
+  2.change settings
+  3.popup yes
+  4.uncheck "use local dhcp service distribute ip address"
+  5.ok
+
+Installing DHCP
+  1.server manager
+  2.manage
+  3.roles and features
+  4.next
+  5.check dhcp server
+  6.add features and next
+  7.next
+  8.check restart option and install
+  
+Configuration of DHCP
+  1.click on DHCP on left pannel
+  2.in yellow color band click more option
+  3.click complete dhcp comfiguration and click on next
+  4.tools
+  5.dhcp
+  6.select domain
+  7.select ipv4
+  8.right click on it and add scope
+  9.next
+  10.give any name foe your dhcp and next
+  11.give start ip address and end ip addess (Range) and length(CIDR no eg 24) and give subnet mask
+  12.if you want to exclude some ip add the ip address and next
+  13.default lease time is 8 days and next
+  14.check "yes, i wat to configure now" and now 
+  15.give default gateway and next
+  16.give parent domain name(eg,itiss.com) and next
+  17.do not give any thing in wins and next
+  18.check "yes i wat to actvate this scope now" and finish
+
+Verify
+  • Press Win + R, type dhcpmgmt.msc, and press Enter to open the DHCP console.
+• In the left pane, expand your server name, expand IPv4, and click on your active Scope.
+• Click on Address Leases in the left column.
+• Look at the middle pane:• If you see client devices listed with their IP addresses and hostnames, your DHCP server is actively handing out configurations.
+• If the list is empty, no client has requested an IP address yet, or devices on your network are still using a different router's DHCP.
+  
