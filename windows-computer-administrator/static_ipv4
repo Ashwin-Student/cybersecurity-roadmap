@@ -1,1 +1,8 @@
 
+1.Server manager
+2.local server
+3.click on ethernet
+4.double click on ethernet 0
+5.click on properties
+6.double click select ipv4
+7.give ip address, gateway, subnet mask, P_dns(ip of server machine),S_dns(gateway)
