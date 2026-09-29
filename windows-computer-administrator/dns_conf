@@ -1,0 +1,69 @@
+First install the DNS Service;
+  1.server manager
+  2.manage
+  3.roles and features
+  4.click on next
+  5.check role based and feature based installation
+  6.select the host name (eg. master.itiss.com) 
+  7.check the DNS server 
+  8.in pop up add features and click on next
+  9.click on next 
+  10.check restart option
+  11.install
+
+Second Create lookup zones;
+
+1.forward lookup zone and forward lookup record
+  a)forward zone creation
+  1.server manager
+  2.tools
+  3.dns
+  4.click on our server name(eg. master)
+  5.click on forward lookup zone 
+  6.right click on forward lookup zone
+  7.slect new zone
+  8.next 
+  9.check primary zone
+  10.give zone name (eg. itiss.com)
+  11.check create file (select by default file name) and next
+  12.check do not allow dynamic chnages and nnext
+  13.finish
+  b)forward zone record creation
+  1.in forward zone
+  2.select zone name (eg.itiss.com)
+  3.right click on it and add (A,CNAME,MAX record)
+  4.give fqdn(fully qualified domain name eg. master.itiss.com) and give ip address on which you want to resolve hostname
+  5.add host
+  
+2.reverse lookup zone and reverse lookup record
+  a)reverse zone creation
+  1.server manager
+  2.tools
+  3.dns
+  4.click on our server name(eg. master)
+  5.click on reverse lookup zone 
+  6.right click on reverse lookup zone
+  7.slect new zone
+  8.next 
+  9.check primary zone
+  10.check ipv4 and next
+  11.give network ip
+  12.check create file (select by default file name) and next
+  13.check do not allow dynamic chnages and nnext
+  14.finish
+  b)reverse zone record creation
+  1.in reverse zone
+  2.select zone name (eg.given network id)
+  3.right click on it and add (PTR record)
+  4.give host ip or server ip (eg 192.168.238.100) and complete host name(eg. master.itiss.com)
+  5.add ptr
+
+Third verify dns;
+  nslookup given_domain_name or ip_address
+  eg.nslookup master.itiss.com
+  eg.nslookup itiss.com
+  eg.nslookup 192.168.238.100
+  
+  
+
+  
