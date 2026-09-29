@@ -1,1 +1,16 @@
 
+1.server manager
+2.click on tools
+3.click on services
+4.slect "open ssh authentication"
+5.right click on it and go to properties
+6.select 'status type' to 'automatic' and click on start
+7.apply and finish
+8. Press the Win + R keys, type wf.msc, and press Enter to open Windows Defender Firewall with Advanced Security.
+9.In the left-hand pane, click on Inbound Rules.
+10.In the right-hand Actions pane, click New Rule....
+11. Choose Port and click Next.
+12. Select TCP and type 22 in the Specific local ports field, then click Next.
+13.Choose Allow the connection and click Next.
+14. Select the network profiles (Domain, Private, Public) where you want this rule applied (usually Domain and Private are safest) and click Next.
+15.Name the rule (e.g., SSH Port 22) and click Finish.
