@@ -7,3 +7,14 @@
 6.add the user(right click and click new user);
   a)give username
   b)give password
+
+
+
+
+To add group for user;
+1.double click user
+2.go to properties
+3.select member of
+4.add user
+5.give username
+6.finish
