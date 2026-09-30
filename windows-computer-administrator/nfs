@@ -1,1 +1,66 @@
 
+
+
+Installation of nfs
+ 1.server manager
+ 2.manager
+ 3.roles and freatures
+ 4.file storage services
+ 5.server for nfs
+ 6. next
+ 7.check restart and install
+
+
+Configuration of nfs
+  1.server manager
+  2.file and storage devices
+  3.share
+  4.task
+  5.new share
+  6.nfs quick share
+  7.custome path
+  8.browse
+  9.new created
+  10.dir (folder)
+  11.provide alias name
+  12.no server auth
+     1.enable unmapped
+     2.allow unmapped user
+ 13.add (all mode and r/w permission)
+ 14.next and create
+
+
+Extended pertition in vmware (add new storage to vm and create a partition)
+ 1.vm setting
+ 2.add
+ 3.hard disk
+ 4.nvme
+ 5.create new
+ 6.give size
+ 7.finish
+
+Create partion by this storage:
+ 1.server manager
+ 2.tools
+ 3.computer management
+ 4.disk management
+ 5.select and mbr or gpt
+ 6.selected unalllocated space
+ 7.right click on it and click new space volume
+ 8.next and next
+ 9.select latter
+ 10.next and finish
+
+NFS client ( on server ):
+ 1.server maanger
+ 2.roles and features
+ 3.next and select nfs client
+ 4.check restart and install
+
+NFS client (on client machine)
+ on linux machine:
+  -> mount -t nfs x.x.x.x(server ip):/S_NFS(shared file name)    /mnt
+
+on windows machine:
+ ->New-PsDrive-Name Z-PSProvider FileSystem - Root "\\x.x.x.x(server ip):\S_NFS(share file name)"
+
