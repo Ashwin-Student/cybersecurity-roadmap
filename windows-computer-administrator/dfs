@@ -1,1 +1,50 @@
+install dfs:
+  1.server manager
+  2.manage
+  3.roles and features
+  4.neaxt and file and storage devices
+     1.file and iscsi server
+          1.dfs namespace
+          2.dfs replication
+  5.check restart and install
 
+create share folder in any C:drive:
+  1.ceate folder
+  2.right click on it and properties
+  3.sharing
+  4.advance share
+  5.add 'Domain Users'
+  6.set permission - read and write
+  7.finish
+
+configuation dfs:
+ 1.tools
+ 2.dfs management cionsole
+ 3.click new namespace
+ 4.go to change and enter server name (eg.master) and ok
+ 5.enter name for namespace (eg.DFS-01)
+ 6.go to settings 
+ 7.custom
+ 8. add domain users
+ 9.check read and write permission
+ 10.check domain based
+ 11.create 
+
+create links for namespaces:
+  1.create ine folder in any drive
+     1. right click and go to properties
+     2.sharing
+     3.add domain users
+     4.check read and write permissions
+     5.and finish
+  2.tools 
+  3.dfs management 
+  4.select created namespace
+  5.new folder
+  6.give name of folder
+  7.browse and select shared folder path
+
+
+on client side verify:
+ 1.windows + R
+ 2.type the path (our created newpsace under newspace in dfs server manager, eg.\\itiss.com\DFS-01)
