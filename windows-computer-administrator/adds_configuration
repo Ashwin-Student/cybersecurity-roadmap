@@ -1,1 +1,20 @@
 
+Installation of Active Directory:
+ 1.server manager
+ 2.manage
+ 3.add roles and features
+ 4.check roles based and feature based installation
+ 5.select host
+ 6.select ADDS
+ 7.add feature
+ 8.next and install
+
+
+Configure Active Directory
+ 1.server manager
+ 2.clcik adds
+ 3.click 'more' at the top of section
+ 4.click 'promote this server to domain' link
+ 5.check 'add new forest' and add any domain name and next
+ 6. select forest functional level and domain functional level 
+    set password for ds restore mode and next and next
