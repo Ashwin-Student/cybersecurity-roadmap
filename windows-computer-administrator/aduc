@@ -1,1 +1,6 @@
-
+1.open setting (win + I)
+2.go to apps -> Apps & features -> Optional features
+3.click add a feature (or view a feature)
+4.type RSAT in the search box
+5.select RSAT:active directory domain services and lightweight directory service tools
+6.clcik install and wait for the download to finish
