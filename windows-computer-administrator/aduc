@@ -4,3 +4,45 @@
 4.type RSAT in the search box
 5.select RSAT:active directory domain services and lightweight directory service tools
 6.clcik install and wait for the download to finish
+
+
+Deploying Desktop Backgrounds with group policies:
+1.configure storage locationns for background image
+  1.shared folder -> create a folder inside the c drive with read only permission for all users, copy the image to this shared folder
+  2.now select folder -> right click on it and go to properties
+  3.go to sharing -> Advanced sharing
+  4.check 'share this folder' -> permissions -> clck on add-> search for 'domain users' -> click on ok
+  5.permission for domain users is read only
+  6. note down the network path of folder
+  7.make sure path is accesible on client machine (win +R) and search the path
+
+2.Create and configure GPO for desktop wallpaper
+ 1.win +R and type : gpmc.msc
+ 2.right click on the domain and select "create a GPO in this domain and lik it there" and named it 'background-image' 
+ 3. right click on this policy and select edit to open the group policy management editor
+ 4.navigate to  "policy template" go to users configuration -> policies -> Administrative templates -> desktop ->desktop ->desktop wallpaper
+ 5.double click desktop wallpaper -> select enabled -> enter the unc path to image -> select fit or any other option for wallpaper style
+ 6.click "apply and ok" then run "gpupdate /force" im cmd to update settings
+
+3.prevent user from chnaging wallpaper
+ 1.open group policy managemnt editor
+ 2.edit the same gpo you ceated for desktop
+ 3.navigate to personalisation settings
+    go to user configuration -> Administrative templates -> control panel -> personalisation
+ 4.enable restriction policy 
+    double click prevent changing desktop background and select enable
+ 5.apply and update policy
+   clck applu and ok then run "gupdate /force" to update settings.
+
+Removable Medias GPO configuration guide
+ 1.Accessing removable medias GPO settings:
+    computer configuration -> policies -> Administrative templates -> system -> Removable storage access
+ 2.Implementing passwords & Accounts Lockout policies
+   1.set password complexity requirements
+       a)creating a new GPO named password security policy
+       b)navigate to computyer configuration -> policies -> windows setting -> security
+       c)configure the following settings
+   2.configure account lockout policies
+       a)navigate to account policies -> account lockout policy within the same GPO
+       b)configure lockout threshold and duration
+       
