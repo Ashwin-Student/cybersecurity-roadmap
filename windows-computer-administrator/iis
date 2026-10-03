@@ -1,1 +1,21 @@
+Installation 
+1.server maanger -> add roles and feature ->next -> next -> select web server iis -> next -> chek include managemnt tools -> add features -> check restart and install
 
+note : after installation we will see new dir in c drive as "Inetpub"
+      enter ip add in brower and check that web is hosted or not
+
+
+Dedicated Web hosting
+ 1.open tools -> open iis manager
+ 2.advanced setting and verify
+ 3.change default document
+ 4.add our local (html document) -> restart
+
+
+Virtual Hosting
+
+ Configure Virtual Dir
+ 1.open server manager -> tools -> iis manager
+ 2.view virtual dir
+ 3.right click on plane -> add virtual dir
+ 4.input url path for [Alias] field, for [physical path] field, input physical folder path.
