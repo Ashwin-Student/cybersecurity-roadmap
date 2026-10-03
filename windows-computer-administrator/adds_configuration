@@ -18,3 +18,30 @@ Configure Active Directory
  5.check 'add new forest' and add any domain name and next
  6. select forest functional level and domain functional level 
     set password for ds restore mode and next and next
+    click on next and check the content
+   clcik on install
+   system will restart automatically
+
+
+Join the domain Controller as client
+(on server)
+
+1.dns manager
+2.navigate to zone : expand forward lookup zones, then your domain
+3.right click on itiss.com -> new domain -> type _msdcs
+4.inside _msdcs, right click -> ne domain -> type dc
+5. inside dc, right click other new records
+6.add srv record -> create record -> service:_ldpa ->protocol:-tcp -> priority :0 -> weight:0 -> port no: 389 -> host offeirng..:example.com -> ok
+
+
+
+
+
+
+On windows client machine
+1.go to setting -> system -> about
+2.click on advanced system settings
+3.click on chnage to change its workgroup or domain
+4.check the domain and provide domain name
+5.if your client is able to  contact to addc then it will ask for domain credentials so provide username is 'administrator' and password for you 'addc admin'
+6.click on 'ok'
