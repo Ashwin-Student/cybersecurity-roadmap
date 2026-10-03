@@ -1,1 +1,10 @@
+Creating an OU
 
+
+1.on server manager -> tools
+2.Active dir Users and Computers
+3.Select itiss.com (domain)
+4.select domain controlers
+5.right click and select new
+6.organisational unit
+7.provide 'ou' name and enable check box "protect controller"
