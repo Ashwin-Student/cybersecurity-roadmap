@@ -1,0 +1,39 @@
+#!/bin/bash
+# ==============================================================================
+# Script Name : 26_fibonacci.sh
+# Description : Generates the first N numbers of the Fibonacci sequence using a loop.
+# Author      : Student / Contributor
+# Github Repo : Shell-Scripting-Solutions
+# ==============================================================================
+
+# Prompt user for the number of terms
+read -p "Enter the number of Fibonacci terms (N): " N
+
+# Input validation: Ensure input is a positive integer greater than 0
+if [ "$N" -le 0 ] 2>/dev/null; then
+    echo "Error: Please enter a positive integer greater than 0."
+    exit 1
+fi
+
+# Initialize the first two terms of the Fibonacci sequence
+a=0
+b=1
+
+echo "The first $N terms of the Fibonacci sequence are:"
+
+# Iterative loop to compute and print terms
+for (( i=0; i<N; i++ ))
+do
+    # Print current term on the same line
+    echo -n "$a "
+    
+    # Calculate next term: fn = a + b
+    fn=$((a + b))
+    
+    # Shift variables forward for the next iteration
+    a=$b
+    b=$fn
+done
+
+# Print newline at the end for clean formatting
+echo ""
