@@ -1,0 +1,29 @@
+#!/bin/bash
+# ==============================================================================
+# Script Name : 29_star_pattern_triangle.sh
+# Description : Prints a right-angled triangle star (*) pattern using nested loops.
+# Author      : Student / Contributor
+# Github Repo : Shell-Scripting-Solutions
+# ==============================================================================
+
+# Read requested height of triangle from user
+read -p "Enter number of rows: " rows
+
+# Validate integer input
+if [ "$rows" -le 0 ] 2>/dev/null; then
+    echo "Error: Please enter a positive integer."
+    exit 1
+fi
+
+# Outer loop controls row iteration count (1 to rows)
+for (( i=1; i<=rows; i++ ))
+do
+    # Inner loop prints stars equal to the current row number
+    for (( j=1; j<=i; j++ ))
+    do
+        echo -n "* "
+    done
+    
+    # Print newline to step down to the next row
+    echo ""
+done
