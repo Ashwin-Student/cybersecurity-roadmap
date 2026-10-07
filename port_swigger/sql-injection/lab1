@@ -1,0 +1,18 @@
+1. SQL injection vulnerability in WHERE clause allowing retrieval of hidden data
+Objective: Retrieve unreleased/hidden products from the product catalog by tampering with the category filter.
+
+Vulnerable Query Structure (Behind the scenes):
+SELECT * FROM products WHERE category = '<USER_INPUT>' AND released = 1
+
+Payload Used:
+' OR 1=1--
+
+Why we used it & How it works:
+
+The Single Quote ('): Breaks out of the intended string literal enclosing the user input in the WHERE clause.
+
+OR 1=1: Introduces a logical condition that is always true.
+
+The Comment (--): Instructs the database to ignore everything that follows in the original query (in this case, AND released = 1).
+
+Result: The query becomes SELECT * FROM products WHERE category = '' OR 1=1--', which evaluates to true for every single row in the table, bypassing the restriction to only show released products.
