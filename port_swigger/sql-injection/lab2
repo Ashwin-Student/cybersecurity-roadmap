@@ -1,0 +1,16 @@
+SQL injection vulnerability allowing login bypass
+Objective: Log into the application as the administrator user without knowing the password.
+
+Vulnerable Query Structure (Behind the scenes):
+SELECT * FROM users WHERE username = '<USERNAME_INPUT>' AND password = '<PASSWORD_INPUT>'
+
+Payload Used (in the Username field):
+administrator'--
+
+Why we used it & How it works:
+
+Targeting the Username: By inputting administrator'--, we close the string literal for the username parameter early using the single quote.
+
+Commenting out the Password: The -- sequence comments out the rest of the query, completely discarding the AND password = ... check.
+
+Result: The database executes: SELECT * FROM users WHERE username = 'administrator'--' AND password = '...'. Because the password check is ignored and the user administrator exists, the application authenticates the session as the admin user.
