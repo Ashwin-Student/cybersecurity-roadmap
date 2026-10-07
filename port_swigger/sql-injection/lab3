@@ -1,0 +1,22 @@
+SQL injection attack, querying the database type and version on MySQL and Microsoft
+Objective: Determine the database management system (DBMS) vendor and version using a UNION injection attack on a MySQL or Microsoft SQL Server backend.
+
+Steps & Payloads Used:
+
+Find the number of columns: ' ORDER BY 1--, ' ORDER BY 2--, etc., until an error occurs.
+
+Find string-compatible columns: ' UNION SELECT 'a', 'b'-- (adjusting nulls/strings based on column count).
+
+Query the version:
+
+MySQL: ' UNION SELECT @@version, NULL-- (or VERSION())
+
+Microsoft SQL Server: ' UNION SELECT @@version, NULL--
+
+Why we used it & How it works:
+
+UNION SELECT: Combines the results of the original application query with the results of our custom query, forcing the application to display our injected data on the page.
+
+@@version / VERSION(): These are built-in global variables or functions in MySQL and MSSQL that return a string containing the exact software name and version details.
+
+Why it matters: Knowing the exact DBMS type and version allows an attacker to tailor subsequent payloads, as SQL syntax (string concatenation, comment styles, system tables) varies significantly between MySQL and SQL Server.
