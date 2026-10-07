@@ -1,0 +1,15 @@
+SQL injection attack, querying the database type and version on Oracle
+Objective: Query the database type and version on an Oracle database backend via a UNION attack.
+
+Payload Used:
+' UNION SELECT banner, NULL FROM v$version--
+
+Why we used it & How it works:
+
+Oracle's Strict Syntax (FROM clause required): Unlike MySQL or PostgreSQL, Oracle requires every SELECT statement to include a FROM clause. If you omit it, the query fails.
+
+The DUAL or System Views: Oracle features built-in administrative views like v$version, which contains database version info. The banner column holds the text describing the Oracle version.
+
+Data Type Matching: Oracle is very strict about data types in UNION queries. If the application's original query column returns a string, your injected column from the database view must also be a string (hence selecting banner instead of a number).
+
+Result: The database appends the Oracle version banner into the application's rendered product output, revealing the precise version.
