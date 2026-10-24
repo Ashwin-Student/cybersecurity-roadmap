@@ -1,0 +1,4 @@
+INVOICE
+Invoice No: 101
+Customer: Rahul
+Amount: Rs. 2500
