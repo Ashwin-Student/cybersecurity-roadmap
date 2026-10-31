@@ -1,1 +1,134 @@
+*************************AWS CLI Configuration ***************************
+# Install AWS CLI (Linux Example)
+curl "https://amazonaws.com" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Configure the CLI environment with your IAM Access Key and Secret Key
+aws configure
+# Prompts: AWS Access Key ID, AWS Secret Access Key, Default region name, Default output format
+
+# Verify current configured identity
+aws sts get-caller-identity
+
+
+
+
+********************************* Compute & Storage Services**********************
+
+1.AWS EC2 (Elastic Compute Cloud) Service 
+# Connect via SSH to a Linux instance
+ssh -i "your-key.pem" ec2-user@your-instance-public-ip
+
+# List all running EC2 instances
+aws ec2 describe-instances --filters "Name=instance-state-name,Values=running"
+
+# Start or stop an instance
+aws ec2 stop-instances --instance-ids i-0123456789abcdef0
+aws ec2 start-instances --instance-ids i-0123456789abcdef0
+
+
+
+2.AWS EBS (Elastic Block Store) Service 
+# Create an EBS volume (Volume size in GiB)
+aws ec2 create-volume --volume-type gp3 --size 20 --availability-zone us-east-1a
+
+# Attach volume to a running instance
+aws ec2 attach-volume --volume-id vol-0123456789abcdef0 --instance-id i-0123456789abcdef0 --device /dev/sdf
+
+# Inside Linux EC2 instance: Format and mount the volume
+lsblk                             # List blocks
+sudo mkfs -t xfs /dev/xvdf        # Create filesystem
+sudo mount /dev/xvdf /mnt/data    # Mount directory
+
+
+
+
+3.AWS AMI (Amazon Machine Image) 
+
+# Create an AMI from an existing custom configured EC2 instance
+aws ec2 create-image --instance-id i-0123456789abcdef0 --name "MyDevOpsProductionImage" --no-reboot
+
+
+
+
+
+*********************************Scaling, High Availability & Object Storage***********************
+
+
+
+
+
+
+1. AWS S3 (Simple Storage Service)
+# Create a globally unique S3 bucket
+aws s3 mb s3://my-cdac-devops-unique-bucket-name
+
+# Copy a local file to S3
+aws s3 cp my-app-build.war s3://my-cdac-devops-unique-bucket-name/builds/
+
+# Sync a local directory with an S3 bucket (ideal for deployment pipelines)
+aws s3 sync ./dist s3://my-cdac-devops-unique-bucket-name/
+
+
+
+2.AWS DynamoDB Service
+
+# Create a DynamoDB table with a Partition Key (Id)
+aws dynamodb create-table \
+    --table-name UsersTable \
+    --attribute-definitions AttributeName=Id,AttributeType=S \
+    --key-schema AttributeName=Id,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+
+
+3.AWS Lambda Function
+# Invoke a deployed Lambda function from your terminal
+aws lambda invoke --function-name MyDevOpsAutomationFunction output.txt
+
+
+
+******************************Infrastructure as Code & Delivery Networks*******************************************
+
+1. AWS CloudFormation IaC
+
+# Deploy resources defined in a YAML template via a CloudFormation Stack
+aws cloudformation create-stack --stack-name my-infra-stack --template-body file://template.yaml
+
+
+2.AWS VPC (Virtual Private Cloud) & VPC Creation
+# Create a VPC with a specified CIDR block
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+
+# Create a Subnet inside that VPC
+aws ec2 create-subnet --vpc-id vpc-01234567 --cidr-block 10.0.1.0/24
+
+
+3. AWS EKS (Elastic Kubernetes Service)
+
+# Update local kubeconfig profile to interact with an active AWS EKS cluster
+aws eks update-kubeconfig --region us-east-1 --name my-eks-cluster
+
+# Verify node connectivity via standard kubectl commands
+kubectl get nodes
+
+
+*********************** What is Terraform?***************
+
+terraform init    # Initializes the working directory and downloads AWS providers
+terraform plan    # Shows the execution plan (what will be created/destroyed)
+terraform apply   # Executes the plan to construct real cloud infrastructure
+
+
+
+
+
+
+
+
+
+
+
+
 
