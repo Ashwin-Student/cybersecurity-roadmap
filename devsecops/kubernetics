@@ -1,1 +1,276 @@
+************************Installation of Kubernetics********************
+# Step 1: Download latest stable kubectl binary
+curl -LO "https://k8s.io(curl -L -s https://k8s.io)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+# Step 2: Download and install Minikube
+curl -LO https://googleapis.com
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+# Step 3: Start cluster using docker virtualization driver
+minikube start --driver=docker
+
+
+
+**********************Installation Verification*********************
+# Check CLI version and API connectivity
+kubectl version --client --output=yaml
+
+# Verify general health of control components
+kubectl cluster-info
+
+# List active compute nodes available in the cluster context
+kubectl get nodes
+
+
+
+
+*******************Exposing PORTS Using a Service********************
+# Expose the webapp deployment to the outside world using NodePort
+kubectl expose deployment live-webapp --type=NodePort --port=80 --target-port=80
+
+
+# Local Minikube Command to open service in browser automatically
+minikube service live-webapp
+
+
+
+
+******************Rollouts & Rollbacks ***********************
+# 1. Update application image to a newer version (Triggers Rollout)
+kubectl set image deployment/live-webapp nginx=nginx:1.25-alpine
+
+# 2. Track real-time progress status of the rollout
+kubectl rollout status deployment/live-webapp
+
+# 3. Inspect historical record of image updates
+kubectl rollout history deployment/live-webapp
+
+# 4. CRITICAL RECOVERY: Undo an update and roll back immediately to the last working version
+kubectl rollout undo deployment/live-webapp
+
+
+
+**************Self-Healing Verification****************
+# Step 1: Monitor pods
+kubectl get pods
+
+# Step 2: Delete a running pod deliberately
+kubectl delete pod <active-pod-name>
+
+# Step 3: Instantly re-list pods. Notice K8s spawned a new replacement Pod within milliseconds
+kubectl get pods
+
+
+# Scale deployment out to 5 concurrent identical pods
+kubectl scale deployment live-webapp --replicas=5
+
+# Verify scaling capacity adjustment status
+kubectl get deployments
+
+
+
+
+
+
+
+
+********************Declarative Architecture (YAML Configs)************************
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dynamic-webapp-deployment
+  labels:
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      run: web-node
+  template:
+    metadata:
+      labels:
+        run: web-node
+    spec:
+      containers:
+      - name: primary-web-container
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-access-service
+spec:
+  type: NodePort
+  selector:
+    run: web-node
+  ports:
+    - port: 8080        # Port exposed inside the cluster
+      targetPort: 80    # Target port the container is listening on
+      nodePort: 30080   # Port mapped on the physical host machine node
+
+
+# Apply the complete declarative manifest to the cluster
+kubectl apply -f production-app.yaml
+
+
+
+
+
+
+
+**********************Advanced Multi-Container Pod Architectures**********************
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-monitored-pod
+spec:
+  containers:
+  - name: main-web-server
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+  - name: helper-sidecar-logger
+    image: alpine
+    command: ["/bin/sh", "-c", "while true; do echo 'System Check OK'; sleep 5; done"]
+
+
+kubectl apply -f multi-container-pod.yaml
+
+
+
+
+
+
+
+********************Enterprise Configuration & Storage Architecture****************
+
+ConfigMaps allow you to separate your configuration settings from your container images, keeping your applications modular and reusable
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: environment-config
+data:
+  DATABASE_HOST: "mysql-db-service"
+  LOG_LEVEL: "DEBUG"
+
+Consuming ConfigMaps inside a Deployment
+
+spec:
+  containers:
+  - name: app-runner
+    image: nginx
+    envFrom:
+    - configMapRef:
+        name: environment-config
+
+
+
+
+
+
+*************************Volume & Data Storage Lifecycle ********************
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-storage-pod
+spec:
+  volumes:
+  - name: host-filesystem-link
+    hostPath:
+      path: /data/analytics-logs   # The actual path on your host node machine
+      type: DirectoryOrCreate
+  containers:
+  - name: processing-engine
+    image: alpine
+    command: ["/bin/sh", "-c", "echo 'Log entry' >> /mnt/logs/app.log"]
+    volumeMounts:
+    - name: host-filesystem-link
+      mountPath: /mnt/logs        # The path where it gets mounted inside the container
+
+----------------------------------------------------------------------------------------------------
+
+###################       Some Advanced Commands   ###########################
+
+1.Declarative Management & File Operations
+
+# Generate a deployment YAML file template without actually creating it (Dry Run)
+kubectl create deployment web-test --image=nginx --dry-run=client -o yaml > test-deploy.yaml
+
+# Generate a service YAML template linked to a deployment (Dry Run)
+kubectl expose deployment web-test --type=NodePort --port=80 --dry-run=client -o yaml > test-svc.yaml
+
+# Delete all resources defined inside a specific configuration file
+kubectl delete -f production-app.yaml
+
+2. ConfigMap & Secret Management 
+
+# Create a ConfigMap directly from literal key-value pairs
+kubectl create configmap app-settings --from-literal=DB_HOST=10.0.0.5 --from-literal=PORT=3306
+
+# Create a ConfigMap from an entire environment configuration file
+kubectl create configmap app-file-config --from-file=config.properties
+
+# View the actual data stored inside a ConfigMap in YAML format
+kubectl get configmap app-settings -o yaml
+
+
+3. Advanced Troubleshooting & Multi-Container Debugging
+
+# View resources with real-time updates (useful during rollouts or self-healing labs)
+kubectl get pods -w
+
+# Stream logs from a specific container inside a multi-container Pod
+kubectl logs sidecar-monitored-pod -c helper-sidecar-logger
+
+# Drop into a shell of a specific container inside a multi-container Pod
+kubectl exec -it sidecar-monitored-pod -c main-web-server -- /bin/sh
+
+# Show resource utilization (CPU and Memory) of nodes and pods (Requires Metrics Server)
+kubectl top nodes
+kubectl top pods
+
+
+4. Cluster Context & Namespace Navigation
+
+# List all namespaces available in your cluster
+kubectl get namespaces
+
+# List pods running inside a specific namespace (e.g., kube-system)
+kubectl get pods -n kube-system
+
+# Create a brand new namespace for an assignment
+kubectl create namespace cdac-lab
+
+# List pods across ALL namespaces simultaneously
+kubectl get pods --all-namespaces
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------
+
+
+Full Resource Name                  	Shortcut Alias	                  Example Command
+
+deployments	                           deploy	                          kubectl get deploy
+services	                              svc	                            kubectl get svc
+pods	                                  po	                            kubectl get po
+configmaps                            	cm	                             kubectl get cm
+persistentvolumes                      	pv                            	kubectl get pv
+persistentvolumeclaims	                pvc	                            kubectl get pvc
+namespaces	                            ns	                            kubectl get ns
+
 
