@@ -1,1 +1,157 @@
+********************installation of git in linux*****************
+->sudo apt update && sudo apt install git -y
+
+
+
+****************Git Configuration file****************
+# Set your global username
+git config --global user.name "Your Name"
+
+# Set your global email address
+git config --global user.email "your.email@example.com"
+
+# Check your active configuration settings
+git config --list
+
+# Check where a specific config value is coming from
+git config --show-origin user.name
+
+
+
+**************Local Machine / Repo Commands**************
+# Initialize a new local Git repository in the current folder
+git init
+
+# View the status of files (untracked, modified, staged)
+git status
+
+# Add a specific file to the Staging Area
+git add filename.txt
+
+# Add all changes (tracked and untracked) to the Staging Area
+git add .
+
+# Permanently record the staged snapshot with a descriptive message
+git commit -m "Your descriptive commit message"
+
+# Show detailed changes (diff) along with metadata for the latest commit
+git show
+
+# Show changes of a specific commit by its SHA-1 hash
+git show 1a2b3c4f
+
+
+
+*************History Manipulation***************
+
+# Switch to an existing branch or jump to a specific past commit
+git checkout branch_name
+
+# Safely discard unstaged changes in your working directory (reverts to last committed state)
+git restore filename.txt
+
+# Unstage a file while keeping its modifications in your working directory
+git restore --staged filename.txt
+
+# Soft Reset: Moves HEAD back, leaves your staging area and working directory intact (keeps changes staged)
+git reset --soft HEAD~1
+
+# Mixed Reset (Default): Moves HEAD, clears staging area, leaves changes in working directory
+git reset HEAD~1
+
+# Hard Reset: CAUTION! Erases all local commits, staged items, and working directory changes to match target commit
+git reset --hard HEAD~1
+
+
+
+********************** Explaining Advanced Git Logs*****************
+
+# View standard commit history list
+git log
+
+# View a compressed, single-line format of each commit
+git log --oneline
+
+# Display the commit history with an ASCII graph showing branches and merges
+git log --graph --oneline --all
+
+# Limit the log to the last N commits
+git log -n 5
+
+
+*********************** Remote Collaboration and GitHub Ecosystem*******************
+# Link your local repository to a hosted GitHub endpoint
+git remote add origin https://github.com
+
+# Display tracked upstream server aliases and URLs
+git remote -v
+
+# Upload local commits from your current branch to the remote repository
+git push -u origin main
+
+# Download objects and references from a remote repository and immediately merge them into your local branch
+git pull origin main
+
+# Download the complete repository history and files from an external project into a new local folder
+git clone https://github.com
+
+
+
+****************************Branching, Merging, and Conflict Resolution*********************
+# List all local branches
+git branch
+
+# Create a new branch branch without switching to it
+git branch feature-login
+
+# Create a new branch and switch to it immediately
+git checkout -b feature-payment
+
+# Merge a target feature branch's commits into your current active branch
+git merge feature-login
+
+
+
+
+
+
+*************************Advanced Git Operations*******************
+
+# Dry run: Show which untracked files will be permanently deleted without actually removing them
+git clean -n
+
+# Forcefully remove all untracked files from the current directory
+git clean -f
+
+# Forcefully remove untracked directories as well as files
+git clean -fd
+
+# Create a lightweight tag pointing to the current commit
+git tag v1.0.0
+
+# Create an annotated tag with a descriptive message
+git tag -a v1.1.0 -m "Production release version 1.1.0"
+
+# Share your local tags to the remote upstream repository
+git push origin --tags
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
