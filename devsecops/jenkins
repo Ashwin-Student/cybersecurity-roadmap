@@ -1,1 +1,78 @@
+********************Installation of Jenkins****************
+# Update local package index
+sudo apt update -y
+
+# Install required Java runtime (OpenJDK 17)
+sudo apt install openjdk-17-jdk openjdk-17-jre -y
+
+# Verify Java installation
+java -version
+
+# Add Jenkins repository GPG key
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://jenkins.io
+
+# Append the Jenkins stable repository to system sources
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://jenkins.io binary/" | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+# Refresh package indexes with the new repo included
+sudo apt update -y
+
+# Install Jenkins
+sudo apt install jenkins -y
+
+# Enable and start the Jenkins background system service
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+# Verify that Jenkins is actively running on default port 8080
+sudo systemctl status jenkins
+
+#to ckeck that jenkins is running or not
+http://your-server-ip:8080
+
+
+
+*************to get an token*****************
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+********************Working with remote server******************
+# Drop down to the system administrative shell profile
+sudo su - s /bin/bash jenkins
+
+# Generate an RSA authentication keypair
+ssh-keygen -t rsa -b 4096
+
+# Copy the public identification key across to your target server
+ssh-copy-id remote_user@remote_server_ip
+
+# Test interactive passwordless login connectivity from terminal
+ssh remote_user@remote_server_ip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
