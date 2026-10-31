@@ -1,1 +1,305 @@
+**********************Ansible Installation********************
+
+# Update package repository
+sudo apt update
+
+# Install software-properties-common for repository management
+sudo apt install software-properties-common -y
+
+# Add official Ansible PPA
+sudo add-apt-repository --yes --update ppa:ansible/ansible
+
+# Install Ansible
+sudo apt install ansible -y
+
+# Verify installation
+ansible --version
+
+
+
+
+
+****************Ansible for Remote Server********************
+Example custom inventory (hosts.ini):
+->[webservers]
+192.168.1.50 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+
+Test remote connectivity using Ad-Hoc command:
+->ansible webservers -i hosts.ini -m ping
+
+
+
+
+***********************First Ansible Playbook*****************
+---
+- name: My First Playbook
+  hosts: localhost
+  tasks:
+    - name: Print a friendly welcome message
+      ansible.builtin.debug:
+        msg: "Welcome to CDAC ITISS DevOps Ansible Module!"
+
+bash:
+->ansible-playbook first-playbook.yml
+
+
+
+***************************** Installing App on Remote Server*******************************
+---
+- name: Install Nginx Web Server
+  hosts: webservers
+  become: true
+  tasks:
+    - name: Ensure Nginx is installed
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+*****************************Copying Files on Remote Server*****************************
+
+    - name: Copy index.html configuration file
+      ansible.builtin.copy:
+        src: /local/path/index.html
+        dest: /var/www/html/index.html
+
+******************************Backup of Files on Remote Server******************
+
+    - name: Copy config file with backup enabled
+      ansible.builtin.copy:
+        src: app.conf
+        dest: /etc/app.conf
+        backup: yes
+
+
+
+
+****************************** Create, Delete & Permission on Remote Server***********************
+
+    - name: Create a new directory with specific permissions
+      ansible.builtin.file:
+        path: /var/www/my_app
+        state: directory
+        mode: '0755'
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Delete a specific file
+      ansible.builtin.file:
+        path: /tmp/old_log.txt
+        state: absent
+
+
+
+
+****************************Run Script Remotely*************************]
+
+    - name: Execute a local cleanup script on remote nodes
+      ansible.builtin.script: /local/scripts/cleanup.sh
+
+
+
+****************************Add Cron Job Remotely************************
+
+    - name: Schedule an database backup every day at 2 AM
+      ansible.builtin.cron:
+        name: "Daily DB Backup"
+        minute: "0"
+        hour: "2"
+        job: "/usr/local/bin/backup_db.sh"
+
+
+******************************Create User on Remote Server**********************
+
+    - name: Create a DevOps engineer user account
+      ansible.builtin.user:
+        name: cdac_user
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+
+
+
+****************************Add or Update Password*********************
+
+
+    - name: Create user with a secure password hash
+      ansible.builtin.user:
+        name: test_user
+        password: "$6$rounds=656000$saltsaltsalt$H8x...[your-hashed-password-here]"
+
+
+*******************************Find and Stop Process*******************
+
+    - name: Stop a specific application process gracefully
+      ansible.builtin.shell: pkill -f "my_buggy_app"
+      ignore_errors: yes
+
+
+********************** Download Files on Remote Server***********************
+
+    - name: Download application package from remote URL
+      ansible.builtin.get_url:
+        url: https://example.com
+        dest: /tmp/software.tar.gz
+        mode: '0644'
+
+
+************************ Enable Service in Firewall********************
+
+
+    - name: Allow incoming HTTP traffic through UFW
+      community.general.ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+
+
+************************** Run Tasks as SUDO User*****************
+
+- name: System maintenance play
+  hosts: webservers
+  become: true # Escalates privileges for all tasks within this play
+  tasks:
+    - name: Restart system clock service
+      ansible.builtin.systemd:
+        name: systemd-timesyncd
+        state: restarted
+
+
+
+
+
+
+
+
+***********************Ad Hoc Task with Ansible**********************
+
+
+# General Syntax: ansible [group] -i [inventory] -m [module] -a [arguments]
+
+# Check disk space on all targets
+ansible all -i hosts.ini -m shell -a "df -h"
+
+# Restart Nginx immediately
+ansible webservers -i hosts.ini -m systemd -a "name=nginx state=restarted" --become
+
+
+
+
+
+
+
+
+
+
+******************************Ansible Tags**********************
+
+    - name: Install security package
+      ansible.builtin.apt:
+        name: fail2ban
+        state: present
+      tags: security
+
+    - name: Update configurations
+      ansible.builtin.copy:
+        src: app.conf
+        dest: /etc/app.conf
+      tags: config
+
+bash
+ansible-playbook playbook.yml --tags "security"
+
+
+
+
+
+
+
+****************************Ansible Variables**********************
+---
+- name: Variable Practice Playbook
+  hosts: localhost
+  vars:
+    app_port: 8080
+    app_dir: "/var/www/app"
+  tasks:
+    - name: Display custom port configuration
+      ansible.builtin.debug:
+        msg: "The application is running on port {{ app_port }} in directory {{ app_dir }}"
+
+
+
+
+
+
+
+*****************************Ansible Handlers********************
+  tasks:
+    - name: Update Nginx virtual host configuration
+      ansible.builtin.copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: Restart Nginx Service
+
+  handlers:
+    - name: Restart Nginx Service
+      ansible.builtin.systemd:
+        name: nginx
+        state: restarted
+
+
+
+
+
+
+***************************Ansible Conditions************************
+    - name: Install Apache on Ubuntu environments
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install Apache on RedHat environments
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+
+
+*************************Ansible Loops***********************
+    - name: Install multiple development tools
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - curl
+        - tmux
+        - htop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
