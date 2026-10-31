@@ -1,1 +1,210 @@
 
+*********************Installation of Docker on Linux*****************
+->go to https://docs.docker.com/engine/install
+->copy all commands together from
+  "1.set up dockers apt repository" and run in terminal together
+->copy the commands from
+  "2.install the docker packages" and run
+->sudo grupadd docker
+->sudo usermod -aG docker $(whoami)
+->sudo reboot
+
+
+
+*******************Basic & Inspection Commands**************
+1.Check Docker version:
+->docker --version
+
+2.Display system-wide information:
+->docker info
+
+3.Image Management
+Download an image from Docker Hub:
+->docker pull ubuntu:latest
+
+4.List local images:
+->Docker images
+
+5.Remove a local image
+->docker rmi <image_id_or_name>
+
+6.Container Lifecycle
+Run a container interactively:
+->docker run -it ubuntu:latest bash
+
+7.Run a container in the background (detached mode) with port mapping:
+->docker run -d -p 8080:80 --name my-web-server nginx:latest
+
+8.List running containers:
+->docker ps
+
+9.List all containers (running and stopped):
+->docker ps -a
+
+10.stop a running container
+->docker stop <container_id_or_name>
+
+11.Start a stopped container:
+->docker start <container_id_or_name>
+
+
+12.Remove a stopped container:
+->docker rm <container_id_or_name>
+
+13.Troubleshooting & Logs
+View container logs:
+->docker logs <container_id_or_name>
+
+14.Execute a command inside a running container:
+->docker exec -it <container_id_or_name> bash
+
+15.restart the contantainer
+->docker restart my-app-container
+
+16.Check Live Resource Usage of active container
+->docker stats
+
+17.Deletes all currently stopped containers on your system
+->docker container prune
+
+18.Inspecting container details:
+->docker inspect <container_id_or_name>
+
+19.list all volumes
+->docker volume ls
+
+20.docker volume inspect 
+->docker volume inspect <volume_name>
+
+21.remove unused volumes
+->docker volume rm <volume_name>
+
+22.Show container port mappings: Quick check to see what ports are exposed.bash
+->docker port <container_name>
+
+
+***************Creation of Docker File********************
+# 1. Choose the base operating system or runtime
+FROM node:20-alpine
+
+# 2. Set the working directory inside the container
+WORKDIR /app
+
+# 3. Copy files from your computer into the container
+COPY package*.json ./
+
+# 4. Run setup/installation commands inside the container
+RUN npm install
+
+# 5. Copy the rest of your project files
+COPY . .
+
+# 6. Document the network port the app listens on
+EXPOSE 3000
+
+# 7. Define the default command to start your application
+CMD ["npm", "start"]
+
+
+********************Image building***************
+docker build -t myapp:latest .
+
+***************Make an Container of an image and run it in diff ways*************
+1.docker run -d -p 80:80 --name react-container my-react-app:latest
+2.docker run -it myapp:latest /bin/sh
+3.docker run --rm myapp:latest
+4.docker run -e NODE_ENV=production -e DB_PORT=5432 -d myapp:latest
+
+
+*****Pushing to Docker hub*******
+1.docker login
+2.docker tag my-app:latest username/my-app:v1
+3.docker push username/my-app:v1
+
+
+*********pulling frm Docker hub**********
+1.docker pull username/my-app:v1
+2.docker run my-app  // run will automatically pull the image 
+
+
+
+
+***************Docker Volumes & Bind Mounts*******************
+----Docker Volumes--------
+1.docker volume create my-vol
+2.docker run -d -v my-vol:/app/data my-image
+
+
+-----------Bind Mounts----------
+1.docker run -d -v $(pwd):/app my-image
+
+
+
+
+
+
+
+*************Docker Compose***********
+1.Start services in detached mode:
+->docker compose up -d
+
+2.View running compose services:
+->docker compose ps
+
+3.View compose logs:
+->docker compose logs -f
+
+4.Stop and remove containers, networks, and volumes:
+->docker compose down -v
+
+
+***********Network Commands************
+1.Create a network:
+->docker network create --driver bridge <network_name>
+
+2.list networks:
+->docker network ls
+
+3.Connect a running container to a network:bash
+->docker network connect <network_name> <container_name>
+
+4.Disconnect a container from a network:bash
+->docker network disconnect <network_name> <container_name>
+
+5.Inspect a network (See which containers are attached to it):bash
+->docker network inspect <network_name>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
