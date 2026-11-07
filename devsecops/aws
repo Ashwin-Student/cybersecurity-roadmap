@@ -124,6 +124,52 @@ terraform apply   # Executes the plan to construct real cloud infrastructure
 
 
 
+********************Essential AWS CLI Configuration Commands**************
+
+# Configure AWS CLI credentials and default region
+aws configure
+
+# Verify current identity
+aws sts get-caller-identity
+
+# List S3 buckets
+aws s3 ls
+
+# Describe EC2 instances
+aws ec2 describe-instances --region ap-south-1
+
+
+
+
+********************AWS CloudFormation (IaC)*******************
+Provision and manage AWS infrastructure using declarative JSON or YAML templates.
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: CDAC-VPC
+
+
+*****************Terraform (Infrastructure as Code)************************
+Industry-standard tool for provisioning multi-cloud infrastructure.
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "Terraform-VPC"
+  }
+}
+
+
+
 
 
 
